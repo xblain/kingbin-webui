@@ -1,0 +1,1073 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="cache-control" content="no-cache, must-revalidate, post-check=0, pre-check=0" />
+  <meta http-equiv="cache-control" content="max-age=0" />
+  <meta http-equiv="expires" content="0" />
+  <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+  <meta http-equiv="pragma" content="no-cache" />
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+  <link rel="stylesheet" href="{% static 'css/now-ui-kit.css' %}">
+
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,600,700,800,900&display=swap" rel="stylesheet">
+  <style>
+    .tooltip:not(.shown) {
+        display: none;
+    }
+  </style>
+
+  <title>Kingpin</title>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg bg-transparent">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <img src="{% static 'assets/menuIcon.svg' %}" width="20px" height="20px" style="max-width: none !important;">
+    </button>
+    <img src="{% static 'assets/BotLogo.svg' %}" width="50" height="50">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 20px !important">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/#features">Features</a>
+        </li>
+        {% if user.is_staff %}
+        <li class="nav-item">
+          <a class="nav-link" href="/dash">Servers</a>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/administration" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ff000d;">Administration</a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="/administration">📦 Item Management</a>
+            <a class="dropdown-item" href="/administration/users#dash">👤 Dashboard User Management</a>
+            <a class="dropdown-item" href="/administration/users#bot">👤 Bot User Management</a>
+          </div>
+        </li>
+        {% endif %}
+      </ul>
+      {% if user.is_authenticated %}
+      <a href="/dash" class="btn btn-primary my-2 my-sm-0"
+        style="font-size: 10px !important;font-family: poppins !important; margin-right: 4px;">{{ user.discord_tag}}
+      </a>
+      <a href="/oauth2/logout" class="btn btn-secondary my-2 my-sm-0"
+        style="font-size: 10px !important;font-family: poppins !important;">LOGOUT</a>
+      {% else %}
+      <a href="/oauth2/login" class="btn login-btn btn-outline-accent my-2 my-sm-0"
+        style="font-size: 10px !important;font-family: poppins !important;">LOGIN</a>
+      {% endif %}
+    </div>
+  </nav>
+  <div class="headingnoback">
+    {% if request.path == "/administration/additem" %}
+    <h1 class="title">Add Item</h1>
+    {%else%}
+    <h1 class="title">Editing Item</h1>
+    {%endif%}
+    <div class="dashboard" id='dashboard' style='background: none !important; text-align:left;'>
+      
+      <div class="row justify-content-center"
+        style="background-color:#14151d;border-radius: 8px;padding-top: 1rem;padding-bottom: 1rem;">
+        <div class=" container">
+          <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+          <div style="display: none; " class="row imagestate justify-content-center">Full Growth</div>
+          <div class="row justify-content-center">
+            <div class="col-sm" style="max-width: 194px; padding:0px !important;">
+              <div class="col-sm  product-holder" style="max-width: 194px; padding-left:0px !important;">
+              <img src="/static/assets/homes/background0.png" class="imagemulti"  style="display: none;">
+              {% if data.item.0|last == "HasImage" %}
+              <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_0.png?t={% now 'YmdHisu' %}" class="first">
+              {% else %}
+              <img src="/static/assets/homes/items/noitem.png" class="first">
+              {% endif %}
+              <input type="file" accept=".png" id="upload0" name="img0" style="max-width: 194px;"
+                oninput='UpdatePreview()'></div>
+              <div class="col-sm  product-holder imagestate" style="display: none; max-width: 194px; padding-left:0px !important;">
+                <img src="/static/assets/homes/background0.png" class="imagemulti">
+                {% if data.item.0|last == "HasImage" %}
+                <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_0_0.png?t={% now 'YmdHisu' %}" class="first_1">
+                {% else %}
+                <img src="/static/assets/homes/items/noitem.png" class="first_1">
+                {% endif %}
+                <input type="file" accept=".png" id="upload0_1" name="img0_0" style="max-width: 194px;"
+                  oninput='UpdatePreview_1()'>
+              </div>
+            </div>
+            <div class="col-sm imagemulti" id="" style="display: none; max-width: 194px; padding:0px !important;">
+              <div class="col-sm  product-holder" style="max-width: 194px; padding-left:0px !important;">
+              <img src="/static/assets/homes/background1.png" class="">
+              {% if data.item.0|last == "HasImage" %}
+              <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_1.png?t={% now 'YmdHisu' %}" class="second">
+              {% else %}
+              <img src="/static/assets/homes/items/noitem.png" class="second">
+              {% endif %}
+              <input type="file" accept=".png" id="upload1" name="img1" style="max-width: 194px;"
+                oninput='UpdatePreview1()'></div>
+                <div class="col-sm  product-holder imagestate" style=" display: none; max-width: 194px; padding-left:0px !important;">
+                  <img src="/static/assets/homes/background0.png" class="imagemulti">
+                  {% if data.item.0|last == "HasImage" %}
+                  <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_1_0.png?t={% now 'YmdHisu' %}" class="second_1">
+                  {% else %}
+                  <img src="/static/assets/homes/items/noitem.png" class="second_1">
+                  {% endif %}
+                  <input type="file" accept=".png" id="upload1_1" name="img1_0" style="max-width: 194px;"
+                    oninput='UpdatePreview1_1()'>
+                </div>
+            </div>
+            <div class="col-sm imagemulti" id="" style="display: none; max-width: 194px; padding:0px !important;">
+              <div class="col-sm  product-holder" style="max-width: 194px; padding-left:0px !important;">
+              <img src="/static/assets/homes/background2.png" class="">
+              {% if data.item.0|last == "HasImage" %}
+              <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_2.png?t={% now 'YmdHisu' %}" class="third">
+              {% else %}
+              <img src="/static/assets/homes/items/noitem.png" class="third">
+              {% endif %}
+              <input type="file" accept=".png" id="upload2" name="img2" style="max-width: 194px;"
+                oninput='UpdatePreview2()'></div>
+                <div class="col-sm  product-holder imagestate" style="display: none; max-width: 194px; padding-left:0px !important;">
+                  <img src="/static/assets/homes/background0.png" class="imagemulti">
+                  {% if data.item.0|last == "HasImage" %}
+                  <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_2_0.png?t={% now 'YmdHisu' %}" class="third_1">
+                  {% else %}
+                  <img src="/static/assets/homes/items/noitem.png" class="third_1">
+                  {% endif %}
+                  <input type="file" accept=".png" id="upload2_1" name="img2_0" style="max-width: 194px;"
+                    oninput='UpdatePreview2_1()'>
+                </div>
+            </div>
+            <div class="col-sm  imagemulti" id="" style="display: none; max-width: 194px; padding:0px !important;">
+              <div class="col-sm  product-holder" style="max-width: 194px; padding-left:0px !important;">
+              <img src="/static/assets/homes/background3.png" class="">
+              {% if data.item.0|last == "HasImage" %}
+              <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_3.png?t={% now 'YmdHisu' %}" class="final">
+              {% else %}
+              <img src="/static/assets/homes/items/noitem.png" class="final">
+              {% endif %}
+              <input type="file" accept=".png" id="upload3" name="img3" style="max-width: 194px;"
+                oninput='UpdatePreview3()'></div>
+                <div class="col-sm  product-holder imagestate" style="display: none; max-width: 194px; padding-left:0px !important;">
+                  <img src="/static/assets/homes/background0.png" class="imagemulti">
+                  {% if data.item.0|last == "HasImage" %}
+                  <img src="/static/assets/homes/items/{{request.path|slice:'25:'}}_3_0.png?t={% now 'YmdHisu' %}" class="final_1">
+                  {% else %}
+                  <img src="/static/assets/homes/items/noitem.png" class="final_1">
+                  {% endif %}
+                  <input type="file" accept=".png" id="upload3_1" name="img3_0" style="max-width: 194px;"
+                    oninput='UpdatePreview3_1()'>
+                </div>
+            </div>
+          </div>
+          <div style="display: none; " class="row imagestate justify-content-center">No Growth<br><br><br></div>
+          
+            
+            <div class="form-group row">
+              <div class="col-xs">
+                <div class="col text-center">Placeable</div>
+                <div class="col h-100">
+                  <div class="checkbox h-100 text-center">
+                    {% if data.item.0.16 %}
+                    <input style="margin-top: 20px;" type="checkbox" checked class="mx-2 placeable" data-toggle="toggle" data-on=" " data-off=" "
+                      data-size="small" name="placeable">
+                    {% else %}
+                    <input style="margin-top: 20px;" type="checkbox" class="mx-2 placeable" data-toggle="toggle" data-on=" " data-off=" "
+                      data-size="small" name="placeable">
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              <div class="col">
+              <label for="exampleInputEmail1">ID</label>
+              <input type="number" class="form-control" name="id" value="{{data.item.0.0}}"></div>
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Item Name</label>
+              <input type="text" class="form-control" name="name" value="{{data.item.0.1}}">
+            </div>
+            <div class="form-group">
+              <label for="exampleInputEmail1">Description</label>
+              <input type="text" class="form-control" name="description" value="{{data.item.0.2}}">
+            </div>
+            <div class="row">
+              <div class="col">
+                <label for="exampleInputEmail1">Money</label>
+                <input type="number" min="0" class="form-control" name="money" value="{%if data.item.0.3 %}{{data.item.0.3}}{%else%}0{%endif%}">
+                <label for="exampleInputEmail1">Credits</label>
+                <input type="number" min="0" class="form-control" name="credits" value="{%if data.item.0.4 %}{{data.item.0.4}}{%else%}0{%endif%}">
+              </div>
+
+
+              <div class="col">
+                <label for="exampleInputEmail1">Emoji</label>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="emoji" data-emojiable="true" maxlength="50" value="{{data.item.0.5}}">
+                  <div class="input-group-append">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#emojiButton" style="padding: 3px 8px;"><span style="font-size: 20px;">👑</span></button>
+                    <div class="tooltip show" role="tooltip">
+                      <emoji-picker></emoji-picker>
+                    </div>
+                  </div>
+                </div>
+                <label for="exampleInputEmail1">Shop Category</label>
+                <input type="number" min="-1" class="form-control" name="category" value="{%if data.item.0.6 %}{{data.item.0.6}}{%else%}-1{%endif%}">
+                <small class="form-text text-muted">-1:Not Available, 1:General, 2:Furniture, 4:Crib Upgrades, 5:Walls,
+                  6:Floors, 7: Backgrounds</small>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <div class="col text-center">For Sale</div>
+                  <div class="col">
+                    <div class="checkbox h-100 text-center">
+                      {% if data.item.0.7 %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" checked class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="forsale">
+                      {% else %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="forsale">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col text-center">Tradeable</div>
+                  <div class="col">
+                    <div class="checkbox h-100 text-center">
+                      {% if data.item.0.8 %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" checked class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="tradeable">
+                      {% else %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="tradeable">
+                      {% endif %}
+                    </div>
+                  </div>
+
+
+
+                </div>
+
+                <div class="col">
+                  <div class="col text-center">Sellable</div>
+                  <div class="col">
+                    <div class="checkbox h-100 text-center">
+                      {% if data.item.0.11 %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" checked class="mx-2 sellable" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="sell">
+                      {% else %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2 sellable" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="sell">
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div class="col text-center">Upgradeable</div>
+                  <div class="col">
+                    <div class="checkbox h-100 text-center">
+                      {% if data.item.0.13 %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" checked class="mx-2 upgrade" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="upgrade">
+                      {% else %}
+                      <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2 upgrade" data-toggle="toggle" data-on=" " data-off=" "
+                        data-size="small" name="upgrade">
+                      {% endif %}
+                    </div>
+                  </div>
+
+
+
+                </div>
+              </div>
+
+              <div class="col-auto" style="max-width: 16em;">
+
+                <label class="sellprice" {% if not data.item.0.11 %} style="display: none;" {% endif %} for="exampleInputEmail1">Sell Price</label>
+                <input type="number" min="0" {% if not data.item.0.11 %} style="display: none;" {% endif %} class="form-control sellprice" id="exampleInputEmail1"
+                  name="sellprice" value="{%if data.item.0.12 %}{{data.item.0.12}}{%else%}0{%endif%}">
+                <div class="col" style="padding: 0;">
+                  <div class="row" style="margin-left: 0px; margin-right: 0px;">
+                    <div class="col-6" style="padding: 0; margin-right: 12px;">
+                      {% if data.item.0.13 %}
+                      <label class="upgradeto" for="upgradeto">🔑 -></label>
+                      <select style="width: 100%;" id="upgradeto" class="form-control upgradeto" name="upgradeto">
+                        {% else %}
+                        <label class="upgradeto" style="display: none;" for="upgradeto">🔑 -></label>
+                        <div class="col-6" style="padding: 0;"></div>
+                          <select style="width: 100%; display: none;" id="upgradeto" class="form-control upgradeto"
+                            name="upgradeto">
+                            {% endif %}
+                            {% for i in data.items %}
+                            {% if i.0 == data.item.0.0 %}
+                            {% else %}
+                            <option {% if i.0 == data.item.0.14 %} selected {% endif %} value="{{ i.0 }}">{{ i.0 }}: {{ i.1 }}</option>
+                            {% endif %}
+                            {% endfor %}
+                          </select>
+                        </div>
+                        <div class="col" style="padding: 0;">
+                          {% if data.item.0.13 %}
+                          <label class="upgradeto" style="width: auto;" for="upgradeamount">🔑 Amount</label>
+                          <input type="number" min="-1" class="form-control upgradeto" id="exampleInputEmail1" name="upgradeamount"
+                            value="{%if data.item.0.15 %}{{data.item.0.15}}{%else%}0{%endif%}">
+                          {% else %}
+                          <label class="upgradeto" style="width: auto; display: none;" for="upgradeamount">🔑 Amount</label>
+                          <input type="number" min="-1" style="display: none;" class="form-control upgradeto"
+                            id="exampleInputEmail1" name="upgradeamount" value="{%if data.item.0.15 %}{{data.item.0.15}}{%else%}0{%endif%}">
+                          {% endif %}
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col" style="padding: 0;">
+
+                  </div>
+                  <br>
+
+                </div>
+                
+                <div class="col">
+                  <label for="exampleInputEmail1">Max limit</label>
+                  {% if data.item.0.9 %}
+                  <input type="number" min='0' class="form-control" id="exampleInputEmail1" name="limit"
+                    value="{{data.item.0.9}}">
+                  {% else %}
+                  <input type="number" min='0' class="form-control" id="exampleInputEmail1" name="limit">
+                  {% endif %}
+                  <div class="col" style="padding: 0;">
+                    <label for="behaviour">Behaviour</label>
+                    <select style="width: 100%;" id="behaviour" class="form-control statesupport" name="behaviour">
+                      <option value="none">None</option>                    
+                      <option {% if data.item.0.10 == "420" %} selected {%endif%} class="" value="420">Plants</option>
+                      <option {% if data.item.0.10 == "FRN" %} selected {%endif%} value="FRN">Furniture</option>
+                      <option {% if data.item.0.10 == "STR" %} selected {%endif%} value="STR">Storage</option>
+                      <option {% if data.item.0.10 == "CMP" %} selected {%endif%} value="CMP">Computer</option>
+                      <option {% if data.item.0.10 == "FSH" %} selected {%endif%} value="FSH">Fishing</option>
+                      <option {% if data.item.0.10 == "UPG" %} selected {%endif%} value="UPG">Crib Upgrade</option>
+                      <option {% if data.item.0.10 == "WAL" %} selected {%endif%} value="WAL">Wallpaper</option>
+                      <option {% if data.item.0.10 == "FLR" %} selected {%endif%} value="FLR">Flooring</option>
+                      <option {% if data.item.0.10 == "BCK" %} selected {%endif%} value="BCK">Backgrounds</option>
+                      <option {% if data.item.0.10 == "INT" %} selected {%endif%} value="INT">Interactables</option>
+                      <option {% if data.item.0.10 == "CRD" %} selected {%endif%} value="CRD">Cards</option>
+                      <option {% if data.item.0.10 == "WPN" %} selected {%endif%} value="WPN">Weapons</option>
+                    </select>
+                  </div>
+                </div>
+                  
+
+
+                </div><br>
+                <div class="row bhide" id="plantbehaviour" style="display:none;">
+                  <div class="col">
+                  <div class="form-group">
+                    <label for="plantcoinreward">Coin Rewards Per Harvest</label>
+                    {% if data.item.0.17 %}
+                    <input type="number" class="form-control" name="reward" value="{{data.item.0.17}}">
+                    {% else %}
+                    <input type="number" class="form-control" name="reward" value="0">
+                    {% endif %}
+                  </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="furniturebehaviour" style="display:none;">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="plantcoinreward">Harvest Influence (+% Coins)</label>
+                      <input type="number" step=".1" class="form-control" name="plantcoinreward" value="0">
+                    </div>
+                    <div class="form-group">
+                      <label for="plantcoinreward">Fishing Influence (+% Rare Fish)</label>
+                      <input type="number" step=".1" class="form-control" name="plantcoinreward" value="0">
+                    </div>
+                    <div class="form-group">
+                      <label for="plantcoinreward">Storage Influence (+% Coins in Storage)</label>
+                      <input type="number" step=".1" class="form-control" name="plantcoinreward" value="0">
+                    </div>
+                    <div class="form-group">
+                      <label for="plantcoinreward">Luck Influence (+% Rare Drops)</label>
+                      <input type="number" step=".1" class="form-control" name="plantcoinreward" value="0">
+                    </div>
+                    </div>
+                </div>
+                <div class="row bhide" id="storagebehaviour" style="display:none;">
+                  <div class="col">
+                    <div class="form-group">
+                      <label for="plantcoinreward">Storage Amount(Coins)</label>
+                      {% if data.item.0.18 %}
+                      <input type="number" class="form-control" name="storage" value="{{data.item.0.18}}">
+                      {% else %}
+                      <input type="number" class="form-control" name="storage" value="0">
+                      {% endif %}
+                    </div>
+                    <div class="form-group">
+                      <label for="plantcoinreward">Storage Security</label>
+                      {% if data.item.0.19 %}
+                      <input type="number" class="form-control" name="storagesecurity" value="{{data.item.0.19}}">
+                      {% else %}
+                      <input type="number" class="form-control" name="storagesecurity" value="0">
+                      {% endif %}
+                    </div>
+                    </div>
+                </div>
+                <div class="row bhide" id="computerbehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="row ">
+                      <div class="col-6">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+                          <label class="form-check-label" for="flexRadioDefault1">
+                            Desktop
+                          </label>
+                        </div></div><div class="col-6">
+                        <div class="form-check form-check-inline">
+                          <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+                          <label class="form-check-label" for="flexRadioDefault2">
+                            Mobile Phone
+                          </label>
+                        </div></div><br><br><br><div class="col">
+</div></div><div class="row ">
+                    <div class="col text-center">Feature 1</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 2</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 3</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 4</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 5</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 6</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 7</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 8</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                    <div class="col text-center">Feature 9</div>
+                    <div class="col">
+                      <div class="checkbox h-100 text-center">
+                        <input style="margin-top: 13px; margin-bottom:7px;" type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" "
+                          data-size="small" name="features">
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="fishingbehaviour" style="display:none;">
+                  <div class="container">
+                  <div class="row">
+                    <div class="col-4">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="fishitemtype" id="fishitemtype1" {% if data.item.0.20 == "rod" %} checked {% else %} {% endif %} value="rod">
+                        <label class="form-check-label" for="fishitemtype">
+                          Fishing Rod
+                        </label>
+                      </div></div><div class="col-4">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="fishitemtype" id="fishitemtype2" {% if data.item.0.20 == "fish" %} checked {% else %} {% endif %} value="fish">
+                        <label class="form-check-label" for="fishitemtype2">
+                          Fish
+                        </label>
+                      </div></div><div class="col-4">
+                      <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="fishitemtype" id="fishitemtype3" {% if data.item.0.20 == "lure" %} checked {% else %} {% endif %} value="lure">
+                        <label class="form-check-label" for="fishitemtype3">
+                          Fishing Lure
+                        </label>
+                      </div></div></div>
+                      <div><br>
+                        <div class="form-group">
+                          <label for="plantcoinreward">+% Catch Chance</label>
+                          <input type="number" class="form-control" name="plantcoinreward" value="0">
+                        </div>
+                        <div class="form-group">
+                          <label for="plantcoinreward">+% Rare Fish</label>
+                          <input type="number" class="form-control" name="plantcoinreward" value="0">
+                        </div>
+                        <div class="form-group">
+                          <label for="plantcoinreward">Lure Time in Minutes</label>
+                          <input type="number" class="form-control" name="plantcoinreward" value="0">
+                        </div></div>
+
+                        <div><br>
+                          <div class="form-group">
+                            <label for="plantcoinreward">Fish Rarity</label>
+                            <input type="number" class="form-control" name="fishrarity" value="{% if data.item.0.21 %}{{data.item.0.21}}{% else %}0{% endif %}">
+                          </div></div>
+                </div></div>
+                <div class="row bhide" id="cribupgradebehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="col">
+                      <img src="/static/assets/homes/types/master.png" class="rounded mx-auto d-block">
+                    </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="wallpaperbehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="col">
+                      <img src="/static/assets/homes/items/{{data.item.0.0}}_0.png" class="rounded mx-auto d-block">
+                    </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="floorbehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="col">
+                      <img src="/static/assets/homes/items/{{data.item.0.0}}_0.png" class="rounded mx-auto d-block">
+                    </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="backgroundbehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="col">
+                      <img src="/static/assets/homes/items/{{data.item.0.0}}_0.png" class="rounded mx-auto d-block">
+                    </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="cardbehaviour" style="display:none;">
+                  <div class="container">
+                    <div class="col">
+                      <img src="/static/assets/cards/base.png" style="width: 400px;" class="rounded mx-auto d-block">
+                    </div>
+                  </div>
+                </div>
+                <div class="row bhide" id="interactablesbehaviour" style="display:none;">
+                  <div class="col">INTERACTABLES BEHAVIOUR</div>
+                </div>
+                <div class="row bhide" id="weaponbehaviour" style="display:none;">
+                  <div class="col">WEAPON BEHAVIOUR</div>
+                </div>
+                <br>
+                <div class="row">
+                <div class="col d-flex justify-content-center"><button type="submit" name="saveitem"
+                  class="btn btn-primary">Save Item</button></div>
+                  {% if request.path != "/administration/additem" %} 
+                  <div class="col d-flex justify-content-center"><button style="background-color: #b3051d!important;" onclick="return confirm('Are you sure? Deleting an item removes it permanently from the database.')" type="submit" name="deleteitem"
+                    class="btn btn-primary">Delete Item</button></div>
+                    {%endif%}
+                  </div>
+
+              
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  <div class="page_end_no_back">
+    <div class="footer">
+      <div class="bot-footer">
+        <img src="{% static 'assets/BotLogoWord.svg' %}" width="150"><br />
+        Copyright © thisismyart.work // kwark.xyz - 2021
+      </div>
+    </div>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="{% static 'lib/css/emoji.css' %}"></script>
+  <script src="{% static 'js/custom.js' %}"></script>
+  <script type="module">
+    import 'https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js'
+    import * as Popper from 'https://cdn.jsdelivr.net/npm/@popperjs/core@^2/dist/esm/index.js'
+    import textFieldEdit from 'https://cdn.jsdelivr.net/npm/text-field-edit@^4/index.js'
+    jQuery(document).ready(function ($) {
+      const button = document.querySelector('button[data-target="#emojiButton"]')
+      const tooltip = document.querySelector('.tooltip')
+      const popperInstance = Popper.createPopper(button, tooltip, {
+        modifiers: [
+          {
+            name: 'eventListeners',
+            options: {
+              scroll: true,
+              resize: true,
+            },
+          }
+        ],
+      })
+
+      document.querySelector('button[data-target="#emojiButton"]').onclick = () => {
+        tooltip.classList.toggle('shown')
+        popperInstance.update()
+      }
+      document.querySelector('emoji-picker').addEventListener('emoji-click', e => {
+        textFieldEdit.insert(document.querySelector('input[name="emoji"]'), e.detail.unicode)
+      })
+    })
+  </script>
+  <script>
+    jQuery(document).ready(function ($) {
+      let selectedTab = window.location.hash;
+      $('.nav-link[href="' + selectedTab + '"]').trigger('click');
+      $("[name=crib_list] option:selected").prependTo("[name=crib_list]");
+      $("[name=sauce_list] option:selected").prependTo("[name=sauce_list]");
+      $("[name=cartel_list] option:selected").prependTo("[name=cartel_list]");
+    })
+
+  </script>
+  <script>
+    $(function () {
+      var $textareas = $('textarea');
+      $('textarea').each(function () {
+        var height = $('<div style="display:none; white-space:pre" id="my-hidden-div"></div>').html($(this).val()).appendTo('body').height();
+        $(this).css('height', height * 1.5 + 'px');
+        $('#my-hidden-div').remove();
+      });
+      $textareas.on('input', autosize);
+
+      function autosize() {
+        var $this = $(this);
+
+        $this
+          .css({ height: 'auto' })
+          .css({ height: $this.prop('scrollHeight') + 2 });
+      }
+    });
+
+
+
+
+    jQuery(document).ready(() => {
+      let url = location.href.replace(/\/$/, "");
+
+      jQuery('a[data-toggle="pill"]').on("click", function () {
+        let newUrl;
+        const hash = $(this).attr("href");
+        if (hash == "#home") {
+          newUrl = url.split("#")[0];
+        } else {
+          newUrl = url.split("#")[0] + hash;
+        }
+        history.replaceState(null, null, newUrl);
+      });
+    });
+  </script>
+  <script>
+    function UpdatePreview() {
+      if (event.target.files[0].name.endsWith('.png')){
+        $('.first').attr('src', URL.createObjectURL(event.target.files[0]));
+      }
+      else {
+        $('.first').attr('src', "/static/assets/homes/items/nopng.png");
+        $("#upload0").val('');
+      }
+
+      $("img").on("error", function () {
+      $(this).attr("src", "/static/assets/homes/items/nopng.png");
+    })
+
+    img = new Image();
+    img.src = URL.createObjectURL(event.target.files[0]);
+  img.onload = function() {
+    console.log('test')
+   if(this.width != 194){
+	$('.first').attr('src', "/static/assets/homes/items/nowidth.png");
+        $("#upload0").val('');
+  }
+ };
+
+  };
+  </script>
+  <script>
+    function UpdatePreview_1() {
+      if (event.target.files[0].name.endsWith('.png')){
+        $('.first_1').attr('src', URL.createObjectURL(event.target.files[0]));
+      }
+      else {
+        $('.first_1').attr('src', "/static/assets/homes/items/nopng.png");
+        $("#upload0_1").val('');
+      }
+
+      $("img").on("error", function () {
+      $(this).attr("src", "/static/assets/homes/items/nopng.png");
+    })
+
+    img = new Image();
+    img.src = URL.createObjectURL(event.target.files[0]);
+  img.onload = function() {
+    console.log('test')
+   if(this.width != 194){
+	$('.first_1').attr('src', "/static/assets/homes/items/nowidth.png");
+        $("#upload0_1").val('');
+  }
+ };
+
+  };
+  </script>
+  <script>
+    function UpdatePreview1() {
+      if (event.target.files[0].name.endsWith('.png')){
+        $('.second').attr('src', URL.createObjectURL(event.target.files[0]));
+      }
+      else {
+        $('.second').attr('src', "/static/assets/homes/items/nopng.png");
+        $("#upload1").val('');
+      }
+
+      img = new Image();
+    img.src = URL.createObjectURL(event.target.files[0]);
+  img.onload = function() {
+    console.log('test')
+   if(this.width != 194){
+	$('.second').attr('src', "/static/assets/homes/items/nowidth.png");
+        $("#upload1").val('');
+  }
+ };
+    };
+  </script>
+
+<script>
+  function UpdatePreview1_1() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.second_1').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.second_1').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload1_1").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.second_1').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload1_1").val('');
+}
+};
+  };
+</script>
+
+<script>
+  function UpdatePreview2() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.third').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.third').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload2").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.third').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload2").val('');
+}
+};
+  };
+</script>
+<script>
+  function UpdatePreview2() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.third').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.third').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload2").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.third').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload2").val('');
+}
+};
+  };
+</script><script>
+  function UpdatePreview2_1() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.third_1').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.third_1').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload2_1").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.third_1').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload2_1").val('');
+}
+};
+  };
+</script>
+<script>
+  function UpdatePreview3() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.final').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.final').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload3").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.final').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload3").val('');
+}
+};
+  };
+</script>
+<script>
+  function UpdatePreview3_1() {
+    if (event.target.files[0].name.endsWith('.png')){
+      $('.final_1').attr('src', URL.createObjectURL(event.target.files[0]));
+    }
+    else {
+      $('.final_1').attr('src', "/static/assets/homes/items/nopng.png");
+      $("#upload3_1").val('');
+    }
+
+    img = new Image();
+  img.src = URL.createObjectURL(event.target.files[0]);
+img.onload = function() {
+  console.log('test')
+ if(this.width != 194){
+$('.final_1').attr('src', "/static/assets/homes/items/nowidth.png");
+      $("#upload3_1").val('');
+}
+};
+  };
+</script>
+  <script>
+    $(".sellable").change(function () {
+      if ($(this).is(':checked')) {
+        $(".sellprice").show();
+      } else {
+        $(".sellprice").hide();
+      }
+    });
+  </script>
+  <script>
+    $(".upgrade").change(function () {
+      if ($(this).is(':checked')) {
+        console.log("ya")
+        $(".upgradeto").show();
+      } else {
+        $(".upgradeto").hide();
+      }
+    });
+  </script>
+  <script>
+    $(".placeable").change(function () {
+      if ($(this).is(':checked')) {
+        console.log("ya")
+        $(".imagemulti").show();
+      } else {
+        $(".imagemulti").hide();
+      }
+    });
+
+    $('document').ready(function(){
+      console.log("ya")
+      if ($(".placeable").is(':checked')) {
+        console.log("ya")
+        $(".imagemulti").show();
+      } else {
+        $(".imagemulti").hide();
+      }
+    });
+
+
+  </script>
+  <script>
+    $(".placeable").change(function () {
+      if ($(this).is(':checked')) {
+        if ($(".statesupport").val() == 420) {
+          $(".imagestate").show();}
+
+    $(".statesupport").change(function () {
+      if ($(".placeable").is(':checked')) {
+      if ($(this).val() == 420) {
+        $(".imagestate").show();
+      } else {
+        $(".imagestate").hide();
+      }
+    }else{$(".imagestate").hide();}});
+    }else{
+      $(".imagestate").hide();
+    }} );
+
+    $(".statesupport").change(function () {
+      console.log('teee')
+      if ($(".placeable").is(':checked')) {
+        console.log('teee')
+        if ($(".statesupport").val() == 420) {
+          $(".imagestate").show();
+
+    }else{
+      $(".imagestate").hide();
+    }}else{
+      $(".imagestate").hide();
+    }} );
+    
+    $('document').ready(function(){
+      if ($(".placeable").is(':checked')) {
+
+      if ($(".statesupport").val() == 420) {
+        $(".imagestate").show();
+      } else {
+        $(".imagestate").hide();
+      }
+      }else{
+        $(".imagestate").hide();
+      }});
+    
+      
+
+  </script>
+
+<script>  
+  $(document).ready(function(){
+    console.log($("#behaviour").val())
+    if ( $("#behaviour").val() == '420'){
+          $("#plantbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'FRN'){
+          $("#furniturebehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'STR'){
+          $("#storagebehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'CMP'){
+          $("#computerbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'FSH'){
+          $("#fishingbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'UPG'){
+          $("#cribupgradebehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'WAL'){
+          $("#wallpaperbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'FLR'){
+          $("#floorbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'BCK'){
+          $("#backgroundbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'INT'){
+          $("#interactablesbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'CRD'){
+          $("#cardbehaviour").show();
+        }
+        else if ( $("#behaviour").val() == 'WPN'){
+          $("#weaponbehaviour").show();
+        }
+
+
+      $('#behaviour').on('change', function() {
+        $(".bhide").hide();
+        if ( this.value == '420'){
+          $("#plantbehaviour").show();
+        }
+        else if ( this.value == 'FRN'){
+          $("#furniturebehaviour").show();
+        }
+        else if ( this.value == 'STR'){
+          $("#storagebehaviour").show();
+        }
+        else if ( this.value == 'CMP'){
+          $("#computerbehaviour").show();
+        }
+        else if ( this.value == 'FSH'){
+          $("#fishingbehaviour").show();
+        }
+        else if ( this.value == 'UPG'){
+          $("#cribupgradebehaviour").show();
+        }
+        else if ( this.value == 'WAL'){
+          $("#wallpaperbehaviour").show();
+        }
+        else if ( this.value == 'FLR'){
+          $("#floorbehaviour").show();
+        }
+        else if ( this.value == 'BCK'){
+          $("#backgroundbehaviour").show();
+        }
+        else if ( this.value == 'INT'){
+          $("#interactablesbehaviour").show();
+        }
+        else if ( this.value == 'CRD'){
+          $("#cardbehaviour").show();
+        }
+        else if ( this.value == 'WPN'){
+          $("#weaponbehaviour").show();
+        }
+
+      });
+  });   
+  </script>
+  
+  
+</body>
+
+</html>

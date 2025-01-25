@@ -1,0 +1,299 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'css/main.css' %}">
+  <link rel="stylesheet" href="{% static 'css/custom.css' %}">
+    <link rel="stylesheet" href="{% static 'css/now-ui-kit.css' %}">
+    
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700,800,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,600,700,800,900&display=swap" rel="stylesheet">
+    <title>Kingpin</title>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-transparent">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <img src="{% static 'assets/menuIcon.svg' %}" width="20px" height="20px" style="max-width: none !important;">
+    </button>
+    <img src="{% static 'assets/BotLogo.svg' %}" width="50" height="50">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="margin-left: 20px !important">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/#features">Features</a>
+            </li>
+            {% if user.is_staff %}
+            <li class="nav-item">
+                <a class="nav-link" href="/dash">Servers</a>
+            </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="/administration" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #ff000d;">Administration</a>
+          <div class="dropdown-menu dropdown-menu-right">
+            <a class="dropdown-item" href="/administration">📦 Item Management</a>
+            <a class="dropdown-item" href="/administration/users#dash">👤 Dashboard User Management</a>
+            <a class="dropdown-item" href="/administration/users#bot">👤 Bot User Management</a>
+          </div>
+        </li>
+        {% endif %}
+        </ul>
+        {% if user.is_authenticated %}
+        <a href="/dash" class="btn btn-primary my-2 my-sm-0" style="font-size: 10px !important;font-family: poppins !important; margin-right: 4px;">{{ user.discord_tag }}</a>
+        <a href="/oauth2/logout" class="btn btn-secondary my-2 my-sm-0" style="font-size: 10px !important;font-family: poppins !important;">LOGOUT</a>
+        {% else %}
+        <a href="/oauth2/login" class="btn login-btn btn-outline-accent my-2 my-sm-0" style="font-size: 10px !important;font-family: poppins !important;">LOGIN</a>
+        {% endif %}
+    </div>
+</nav>
+<div class="headingnoback">
+    <h1 class="title">{{guild.name}}</h1>
+    <div class="dashboard" id='dashboard' style='background: none !important; text-align:left;'>
+        <div class="row" style="background-color:#14151d;border-radius: 8px;padding-top: 1rem;padding-bottom: 1rem;">
+            <div class="col-3">
+              <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <!-- <a class="nav-link a" id="general-tab" data-toggle="pill" href="#general" role="tab">General</a> -->
+                <a class="nav-link active a" id="welcome-tab" data-toggle="pill" href="#welcome" role="tab" >Welcome</a>
+                <a class="nav-link a" id="embeds-tab" data-toggle="pill" href="#embeds"  role="tab">Message</a>
+                <!-- <a class="nav-link a" id="cartel-tab" data-toggle="pill"  href="#cartel" role="tab" >Cartel?</a> -->
+              </div>
+            </div>
+            <div class="col-9" style="padding-left:0px !important;">
+              <!-- <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="general" role="tabpanel" aria-labelledby="general-tab">
+                  <form id=general method="post">
+                    {% csrf_token %}
+                    {% if guild.db.enabled %}
+                    <input type="checkbox" checked class="mx-2" data-toggle="toggle" data-on=" " data-off=" " data-size="small" name="bot_enabled"> Enable Bot &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% else %}
+                    <input type="checkbox" class="mx-2" data-toggle="toggle" data-on=" " data-off=" " data-size="small" name="bot_enabled"> Enable Bot &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    {% endif %}
+                    Localization 
+                      <select name="localization" id="localization"class="mx-2">
+                        {% if guild.localization == "1"%}
+                        <option value="NL">NL</option>
+                        <option value="EN">EN</option>
+                        {% else %}
+                        <option value="EN">EN</option>
+                        <option value="NL">NL</option>
+                        {% endif %}
+                      </select>
+                    <button type="submit" name="generalsave" class="btn btn-secondary my-2 my-sm-0" style="font-size: 10px !important;font-family: poppins !important; float:right;">Save Settings</button>
+                <br>
+                <div class="form-group">
+                  <br>
+                    <label for="sel1" style="width:100%;"><div>
+                      
+                      {% if guild.db.crib_enabled %}
+                      <input type="checkbox"class="mx-2 checkbox"  checked data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="crib_enabled"> Limit Crib Commands to Channel
+                      {% else %}   
+                      <input type="checkbox" class="mx-2 checkbox"  data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="crib_enabled"> Limit Crib Commands to Channel 
+                      {% endif %}
+                          <br><br>
+                          <select multiple class="form-control lcrib" style="text-align: center; display: none;"name="crib_list">
+                            {% for i in guild.tchannel %}
+                            {% if i in guild.crib_list %}
+                            <option selected>{{i}}</option>
+                            {% else %}
+                            <option>{{i}}</option>
+                            {% endif %}
+                            {% endfor %}
+                        </select>                         
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="sel1" style="width:100%;"><div class="checkbox">
+                      {% if guild.db.sauce_enabled %}
+                          <input type="checkbox" class="mx-2 checkbox"  checked data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="sauce_enabled"> Limit Sauce Commands to Channel
+                          {% else %}   
+                          <input type="checkbox" class="mx-2 checkbox"  data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="sauce_enabled"> Limit Sauce Commands to Channel 
+                          {% endif %}
+                          <br><br>
+                          <select multiple class="form-control lcrib" style="text-align: center; display: none;"name="sauce_list">
+                              {% for i in guild.tchannel %}
+                              {% if i in guild.sauce_list %}
+                              <option selected>{{i}}</option>
+                              {% else %}
+                              <option>{{i}}</option>
+                              {% endif %}
+                              {% endfor %}
+                        </select>                         
+                      </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="sel1" style="width:100%;"><div class="checkbox">
+                          {% if guild.db.cartel_enabled %}
+                          <input type="checkbox" class="mx-2 checkbox"  checked data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="cartel_enabled"> Limit Cartel Commands to Channel
+                          {% else %}   
+                          <input type="checkbox" class="mx-2 checkbox"  data-toggle="toggle" data-on=" " data-off=" " data-size="small"name="cartel_enabled"> Limit Cartel Commands to Channel 
+                          {% endif %}
+                          <br><br>
+                          <select multiple class="form-control lcrib" style="text-align: center; display: none;"name="cartel_list">
+                              {% for i in guild.tchannel %}
+                              {% if i in guild.cartel_list %}
+                              <option selected>{{i}}</option>
+                              {% else %}
+                              <option>{{i}}</option>
+                              {% endif %}
+                              {% endfor %}
+                        </select>                         
+                      </div>
+                  </div>
+                </div> 
+                <div class="tab-pane fade" id="cartel" role="tabpanel" aria-labelledby="cartel-tab">
+                  <button type="submit" name="cartelsave" class="btn btn-secondary my-2 my-sm-0" style="font-size: 10px !important;font-family: poppins !important; float:right;">Save Settings</button>
+                  <label>Attack Command</label><br>
+                  {% if guild.attackcommand == "0" %}
+                  <input type="radio" checked id="attack" name="attackcommand" value="attack">
+                  <label for="attack">Attack</label><br>
+                  <input type="radio" id="prank" name="attackcommand" value="prank">
+                  <label for="female">Prank</label><br><br>
+                  {% else %}
+                  <input type="radio"  id="attack" name="attackcommand" value="attack">
+                  <label for="attack">Attack</label><br>
+                  <input type="radio" checked id="prank" name="attackcommand" value="prank">
+                  <label for="female">Prank</label><br><br>
+                  {% endif %}
+                  <label for="sel1" style="width:100%; "> Custom Attack Messages
+                          <textarea placeholder="For Example.. Punch in the nuts ..One Message per line.." class="form-control"rows="3" style="min-height: 80px;resize: vertical; max-height: 300px;padding-left: 1rem !important;"name="attack_list">{{guild.attack_list}}</textarea>
+                </div> 
+                <div class="tab-pane fade" id="moderation" role="tabpanel" aria-labelledby="moderation-tab">...</div> -->
+                <div class="tab-pane fade show active" id="welcome" role="tabpanel" aria-labelledby="welcome-tab">
+                  <form id=welcome method="post">
+                    {% csrf_token %}
+                    {% if guild.db.welcome_enabled %}
+                    <input type="checkbox" checked name="welcome_enabled" class="mx-1"> Enable Custom Messages
+                    {% else %}
+                    <input type="checkbox" name="welcome_enabled" class="mx-1"> Enable Custom Messages
+                    {% endif %}
+                    <button type="submit" name="welcomesave" class="btn btn-secondary my-2 my-sm-0 " style="font-size: 10px !important;font-family: poppins !important; float:right;">Save Settings</button>
+                <br><br>
+                    <label for="sel1" style="width:100%;"> Custom Welcome Message Channel
+                          <br><br>
+                          <select class="form-control" name="welcome_channel">
+                            {% for i in guild.tchannel %}
+                            {% if i in guild.welcome_channel %}
+                              <option >{{i}}</option>
+                              {% endif %}
+                            {% endfor %}
+                            {% for i in guild.tchannel %}
+                            {% if i not in guild.welcome_channel %}
+                              <option>{{i}}</option>
+                              {% endif %}
+                            {% endfor %}
+                        </select>      
+                        <br>
+                        <label for="sel1" style="width:100%;""> Custom Welcome Messages <br><br>
+                          <textarea placeholder="Welcome **{user}** to **{server}.** ..One Message per line.." class="form-control"rows="3" style="resize: vertical;min-height: 80px; max-height: 300px;padding-left: 1rem !important;"name="welcome_list">{{guild.welcome_list}}</textarea>         
+                  </form></div>
+                <div class="tab-pane fade" id="music" role="tabpanel" aria-labelledby="music-tab">...</div>
+                <div class="tab-pane fade" id="embeds" role="tabpanel" aria-labelledby="embeds-tab">
+                  <form id=message method="post">
+                    {% csrf_token %}
+                        <label for="sel1" style="width:100%; text-align: left;">
+                              Channel
+                              <br><br>
+                              <select name="message_channel" class="form-control" style="text-align: center;">
+                            {% for i in guild.tchannel %}
+                            {% if i in guild.message_channel %}
+                            <option>{{i}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            {% for i in guild.tchannel %}
+                            {% if i not in guild.message_channel %}
+                            <option>{{i}}</option>
+                            {% endif %}
+                            {% endfor %}
+                            </select><br>  
+                            Message
+                            <br><br>
+                            <textarea placeholder="Enter your message content here..." class="form-control"rows="3" style="resize: vertical;min-height: 100px; max-height: 900px;padding-left: 1rem !important;"name="message_content">{{guild.message_content}}</textarea>
+                            <br>
+                            <div style="background-color:#0a0a0c;border-radius: 8px;padding:1rem;">Embed
+                                <br><br>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Author Name" style="font-size: 0.5571em;"value="{{guild.message_author}}" name="embed_author">
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Embed Title.." value="{{guild.embed_title}}" name="embed_title">
+                                <br>
+                                <textarea placeholder="Embed Content.." class="form-control"rows="5" style=" min-height: 100px; resize: vertical; max-height: 900px;padding-left: 1rem !important;" name="embed_description">{{guild.embed_description}}</textarea>
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Image URL"value="{{guild.embed_image}}"name="embed_image">
+                                <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="Embed Footer.." style="font-size: 0.5571em;"value="{{guild.embed_footer}}"name="embed_footer">
+                                <br>
+                                <br>
+                                <div style="margin: auto; width:36.3rem;">
+                                <button type="submit" name="getmessage"class="btn btn-primary mx-4">Get Message</button>
+                                <button type="submit" name="sendmessage"class="btn btn-primary" >Submit</button>
+                                <input type="text" name="message_id"class="form-control" id="exampleFormControlInput1" placeholder="ID TO GET/EDIT"style='width:12rem;height:3.45rem;float:left' value="{{guild.message_id}}">
+                              </div>
+                            </div></form>             
+                </div>
+              </div>
+            </div>
+          </div></div>
+</div>
+<div class="page_end_no_back">
+    <div class="footer">
+        <div class="bot-footer">
+            <img src="{% static 'assets/BotLogoWord.svg' %}" width="150"><br />
+            Copyright © thisismyart.work // kwark.xyz - 2021
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="js/now-ui-kit.min.js"></script>
+  <script src="js/custom.js"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        let selectedTab = window.location.hash;
+        $('.nav-link[href="' + selectedTab + '"]' ).trigger('click');
+        $("[name=crib_list] option:selected").prependTo("[name=crib_list]");
+        $("[name=sauce_list] option:selected").prependTo("[name=sauce_list]");
+        $("[name=cartel_list] option:selected").prependTo("[name=cartel_list]");
+    })
+    
+</script>
+<script>
+  $(function () {
+  var $textareas = $('textarea');
+  $('textarea').each(function(){
+        var height = $('<div style="display:none; white-space:pre" id="my-hidden-div"></div>').html($(this).val()).appendTo('body').height();
+        $(this).css('height',height*1.5 + 'px');
+        $('#my-hidden-div').remove();
+    });
+  $textareas.on('input', autosize);
+
+  function autosize() {
+    var $this = $(this);
+
+    $this
+      .css({height: 'auto'})
+      .css({height: $this.prop('scrollHeight')+ 2});
+  }
+});
+
+
+
+
+    jQuery(document).ready(() => {
+  let url = location.href.replace(/\/$/, "");
+
+  jQuery('a[data-toggle="pill"]').on("click", function() {
+    let newUrl;
+    const hash = $(this).attr("href");
+    if(hash == "#home") {
+      newUrl = url.split("#")[0];
+    } else {
+      newUrl = url.split("#")[0] + hash;
+    }
+    history.replaceState(null, null, newUrl);
+  });
+});
+</script>
+</body>
+</html>
