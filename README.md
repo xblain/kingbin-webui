@@ -12,8 +12,8 @@ A web-based user interface for Kingpin, providing an intuitive way to interact w
 ## Screenshots
 
 ### User Management Panel
-![User management interface with list of users](/readme-images/usermanagement.png)
+![User management interface with list of users](/readme-images/usermanagement.jpg)
 
 ### Item Management System
-![Item management interface showing item list and controls](/readme-images/itemmanagement.png)
-![Item management interface showing item editing](/readme-images/item.png)
+![Item management interface showing item list and controls](/readme-images/itemmanagement.jpg)
+![Item management interface showing item editing](/readme-images/item.jpg)
