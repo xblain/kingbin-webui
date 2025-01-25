@@ -1,4 +1,4 @@
-# Mauribot WebUI
+# Kingpin WebUI
 
 A web-based user interface for Kingpin, providing an intuitive way to interact with and manage the bot's functionalities.
 
